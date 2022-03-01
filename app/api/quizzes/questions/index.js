@@ -1,16 +1,12 @@
 const { Router } = require('express')
 
-const { Quiz } = require('../../models')
+const { Question } = require('../../../models')
 
-const QuestionRouteur = require('./questions')
-
-const router = new Router()
-
-router.use('/:quizId/questions', QuestionRouteur)
+const router = new Router({ mergeParams: true })
 
 router.get('/', (req, res) => {
   try {
-    res.status(200).json(Quiz.get())
+    res.status(200).json(Question.get())
   } catch (err) {
     res.status(500).json(err)
   }
@@ -19,7 +15,7 @@ router.get('/', (req, res) => {
 router.get('/:quizId', (req, res) => {
   try {
     console.log(req.params.quizId)
-    res.status(200).json(Quiz.getById(req.params.quizId))
+    res.status(200).json(Question.getById(req.params.quizId))
   } catch (err) {
     res.status(500).json(err)
   }
@@ -27,8 +23,8 @@ router.get('/:quizId', (req, res) => {
 
 router.post('/', (req, res) => {
   try {
-    const quiz = Quiz.create({ ...req.body })
-    res.status(201).json(quiz)
+    const question = Question.create({ ...req.body })
+    res.status(201).json(question)
   } catch (err) {
     if (err.name === 'ValidationError') {
       res.status(400).json(err.extra)
@@ -41,7 +37,7 @@ router.post('/', (req, res) => {
 router.delete('/:quizId', (req, res) => {
   try {
     console.log(req.params.quizId)
-    res.status(200).json(Quiz.delete(req.params.quizId))
+    res.status(200).json(Question.delete(req.params.quizId))
   } catch (err) {
     res.status(500).json(err)
   }
@@ -50,10 +46,11 @@ router.delete('/:quizId', (req, res) => {
 router.put('/:quizId', (req, res) => {
   try {
     console.log(req.body)
-    res.status(200).json(Quiz.update(req.body))
+    res.status(200).json(Question.update(req.body))
   } catch (err) {
     res.status(500).json(err)
   }
 })
+
 
 module.exports = router
